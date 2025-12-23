@@ -12,6 +12,7 @@ interface GameActions {
   moves: number;
   seconds: number;
   tick: () => void;
+  toggleDarkMode: () => void;
 }
 
 // Helper para manejar localStorage de forma segura
@@ -27,6 +28,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   status: 'idle',
   difficulty: 8,
   mode: 'icons',
+  isDarkMode: localStorage.getItem('theme') === 'dark',
   bestScore: getStoredBestScore(),
   initGame: async (difficulty, mode = 'icons') => {
     set({ status: 'loading'});
@@ -41,6 +43,12 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
       difficulty,
       bestScore: getStoredBestScore(),
     });
+  },
+
+  toggleDarkMode: () => {
+    const newMode = !get().isDarkMode;
+    set({ isDarkMode: newMode });
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
   },
 
   // Acción para que el hook llame cada segundo

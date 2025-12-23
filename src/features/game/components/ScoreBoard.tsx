@@ -3,7 +3,7 @@ import { useTimer } from '../../../hooks/useTimer';
 import { RotateCcw, Timer, Hash, PlayIcon } from 'lucide-react';
 
 export const ScoreBoard = () => {
-  const { moves, resetGame, difficulty, initGame, bestScore, startGame, status, mode } = useGameStore();
+  const { moves, resetGame, difficulty, initGame, bestScore, startGame, status, mode, isDarkMode } = useGameStore();
   const { formatTime } = useTimer();
 
   return (
@@ -11,26 +11,26 @@ export const ScoreBoard = () => {
       <div className="flex gap-2 mb-4">
         <button 
           onClick={() => initGame(difficulty, 'icons')}
-          className={`px-3 py-1 rounded ${mode === 'icons' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+          className={`px-3 py-1 rounded ${mode === 'icons' ? 'bg-indigo-600 text-white' : isDarkMode ? 'bg-gray-500' : 'bg-gray-200'}`}
         >
           Modo Offline (Iconos)
         </button>
         <button 
           onClick={() => initGame(difficulty, 'images')}
-          className={`px-3 py-1 rounded ${mode === 'images' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+          className={`px-3 py-1 rounded ${mode === 'images' ? 'bg-indigo-600 text-white' : isDarkMode ? 'bg-gray-500' : 'bg-gray-200'}`}
         >
           Modo Online (Imágenes)
         </button>
       </div>
-      <div className="flex gap-8 bg-white p-4 rounded-2xl shadow-md border border-indigo-100">
+      <div className={`flex gap-8 p-4 rounded-2xl shadow-md border ${isDarkMode ? 'bg-indigo-900 border-white' : 'bg-white border-indigo-100'}`}>
         <div className="flex items-center gap-2">
-          <Hash className="text-indigo-500" size={20} />
-          <span className="font-bold text-gray-700">Movimientos: {moves}</span>
+          <Hash className={`${isDarkMode ? 'text-white' : 'text-indigo-600'}`} size={20} />
+          <span className={`font-bold text-gray-700 ${isDarkMode ? 'text-white' : 'text-indigo-600'}`}>Movimientos: {moves}</span>
         </div>
         
         <div className="flex items-center gap-2">
-          <Timer className="text-indigo-500" size={20} />
-          <span className="font-mono font-bold text-gray-700">{formatTime()}</span>
+          <Timer className={`${isDarkMode ? 'text-white' : 'text-indigo-600'}`} size={20} />
+          <span className={`font-bold text-gray-700 font-mono ${isDarkMode ? 'text-white' : 'text-indigo-600'}`}>{formatTime()}</span>
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export const ScoreBoard = () => {
       <div className="flex gap-4">
         <select 
           onChange={(e) => initGame(Number(e.target.value))}
-          className="bg-white border-2 border-indigo-200 rounded-lg px-4 py-2 outline-none focus:border-indigo-500"
+          className={`border-2 border-indigo-200 rounded-lg px-4 py-2 outline-none focus:border-indigo-500 transition-all duration-300 ${isDarkMode ? 'bg-neutral-900': 'bg-white'}`}
           value={difficulty}
         >
           <option value={8}>Fácil (8)</option>

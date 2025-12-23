@@ -11,6 +11,7 @@ interface Props {
 export const CardIcon = ({ card }: Props) => {
   const mode = useGameStore((state) => state.mode);
   const flipCard = useGameStore((state) => state.flipCard);
+  const isDarkMode = useGameStore((state) => state.isDarkMode);
   
   // Obtenemos el componente de icono dinámicamente
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -45,7 +46,13 @@ export const CardIcon = ({ card }: Props) => {
         }}
       >
         {/* PARTE TRASERA (Cerrada) */}
-        <div className="absolute inset-0 w-full h-full bg-indigo-600 rounded-xl shadow-xl border-2 border-white flex items-center justify-center [backface-visibility:hidden]">
+        <div
+          className={`absolute inset-0 w-full h-full rounded-xl border-2 flex items-center justify-center [backface-visibility:hidden] transition-colors ${
+            isDarkMode 
+              ? 'bg-slate-900 border-slate-700' 
+              : 'bg-white border-indigo-600'
+            }`}
+        >
           {/* Un patrón simple para que parezca el reverso de una carta */}
           <div className="w-16 h-24 border-2 border-indigo-400 rounded-lg opacity-30 flex items-center justify-center">
             <div className="w-8 h-8 bg-indigo-400 rounded-full" />
@@ -53,7 +60,12 @@ export const CardIcon = ({ card }: Props) => {
         </div>
 
         {/* PARTE FRONTAL (Icono) */}
-        <div className="absolute inset-0 w-full h-full bg-white rounded-xl shadow-xl border-2 border-indigo-600 flex items-center justify-center [backface-visibility:hidden] [transform:rotateY(180deg)]">
+        <div className={`absolute inset-0 w-full h-full bg-white rounded-xl shadow-xl border-2 flex items-center justify-center [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+          isDarkMode 
+            ? 'border-slate-500/50' 
+            : 'border-indigo-600'
+          }`}
+        >
           {mode === 'icons' && IconComponent ? (
             <IconComponent className="text-indigo-600 w-12 h-12" />
           ): (

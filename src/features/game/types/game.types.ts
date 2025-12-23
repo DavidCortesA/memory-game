@@ -17,4 +17,5 @@ export interface GameState {
   difficulty: number;
   bestScore: number;
   mode: GameMode;
+  isDarkMode: boolean;
 }
