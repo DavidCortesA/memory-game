@@ -1,28 +1,38 @@
-import type { Card } from "../types/game.types";
-import { shuffle } from "./shuffle";
+import type { Card, GameMode } from '../types/game.types';
+import { shuffle } from './shuffle';
 
-// Lista de nombre de iconos disponibles en Lucide
-const ICON_POOL = [
-  'Ghost', 'Box', 'Camera', 'Moon', 'Star', 'Sun', 
-  'Cloud', 'Heart', 'Zap', 'Anchor', 'Bell', 'Bird'
-];
+// Lista de iconos para el modo offline
+const ICON_LIST = ['Heart', 'Star', 'Zap', 'Ghost', 'Moon', 'Sun', 'Anchor', 'Coffee', 'Music', 'Cloud', 'Smile', 'Dribbble'];
 
-export const generateCards = (count: number): Card[] => {
-  // Tomamos la mitad del totla para tener parejas
-  const selectedIcons = ICON_POOL.slice(0, count / 2);
+export const generateCards = async (difficulty: number, mode: GameMode): Promise<Card[]> => {
+  const numPairs = difficulty / 2;
 
-  const duplicatedCard = [...selectedIcons, ...selectedIcons].map((icon, index) => ({
-    id: `${icon}-${index}-${Math.random()}`,
-    iconName: icon,
-    isFlipped: false,
-    isMatched: false,
-  }));
-
-  // Algoritmo de barajado Fisher-Yates
-  for (let i = duplicatedCard.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [duplicatedCard[i], duplicatedCard[j]] = [duplicatedCard[j], duplicatedCard[i]];
+  if (mode === 'icons') {
+    // Lógica Offline (Iconos)
+    const selectedIcons = ICON_LIST.slice(0, numPairs);
+    const deck = [...selectedIcons, ...selectedIcons].map((icon, index) => ({
+      id: `card-${index}`,
+      iconName: icon,
+      isFlipped: false,
+      isMatched: false,
+    }));
+    return shuffle(deck);
+  } else {
+    // Lógica Online (Unsplash)
+    const ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY;
+    const response = await fetch(
+      `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}&count=${numPairs}&query=nature`
+    );
+    const data = await response.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const images = data.map((img: any) => img.urls.small);
+    
+    const deck = [...images, ...images].map((url, index) => ({
+      id: `card-${index}`,
+      imageUrl: url,
+      isFlipped: false,
+      isMatched: false,
+    }));
+    return shuffle(deck);
   }
-
-  return shuffle(duplicatedCard);
-}
+};

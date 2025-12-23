@@ -3,11 +3,25 @@ import { useTimer } from '../../../hooks/useTimer';
 import { RotateCcw, Timer, Hash, PlayIcon } from 'lucide-react';
 
 export const ScoreBoard = () => {
-  const { moves, resetGame, difficulty, initGame, bestScore, startGame, status } = useGameStore();
+  const { moves, resetGame, difficulty, initGame, bestScore, startGame, status, mode } = useGameStore();
   const { formatTime } = useTimer();
 
   return (
     <div className="flex flex-col items-center gap-6 mb-8 w-full">
+      <div className="flex gap-2 mb-4">
+        <button 
+          onClick={() => initGame(difficulty, 'icons')}
+          className={`px-3 py-1 rounded ${mode === 'icons' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          Modo Offline (Iconos)
+        </button>
+        <button 
+          onClick={() => initGame(difficulty, 'images')}
+          className={`px-3 py-1 rounded ${mode === 'images' ? 'bg-indigo-600 text-white' : 'bg-gray-200'}`}
+        >
+          Modo Online (Imágenes)
+        </button>
+      </div>
       <div className="flex gap-8 bg-white p-4 rounded-2xl shadow-md border border-indigo-100">
         <div className="flex items-center gap-2">
           <Hash className="text-indigo-500" size={20} />

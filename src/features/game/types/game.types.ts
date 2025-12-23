@@ -1,10 +1,13 @@
-export type GameStatus = 'idle' | 'playing' | 'won';
+export type GameStatus = 'idle' | 'playing' | 'won' | 'loading';
+
+export type GameMode = 'icons' | 'images';
 
 export interface Card {
   id:  string;
-  iconName: string;
   isFlipped: boolean;
   isMatched: boolean;
+  imageUrl?: string;
+  iconName?: string;
 }
 
 export interface GameState {
@@ -13,4 +16,5 @@ export interface GameState {
   status: GameStatus;
   difficulty: number;
   bestScore: number;
+  mode: GameMode;
 }

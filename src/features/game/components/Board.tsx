@@ -1,5 +1,5 @@
 import { useGameStore } from '../../../store/useGameStore';
-import { Card } from './Card';
+import { CardIcon } from './CardIcon';
 
 export const Board = () => {
   const { cards, difficulty } = useGameStore();
@@ -10,7 +10,7 @@ export const Board = () => {
   return (
     <div className={`grid ${gridCols} gap-4 p-4 max-w-4xl mx-auto justify-items-center`}>
       {cards.map((card) => (
-        <Card key={card.id} card={card} />
+        <CardIcon key={card.id} card={card} />
       ))}
     </div>
   );

@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import type { GameState } from "../features/game/types/game.types";
+import type { GameMode, GameState } from "../features/game/types/game.types";
 import { generateCards } from "../features/game/utils/generateCards";
+import { sounds } from "../features/game/utils/audio";
 
 interface GameActions {
-  initGame: (difficulty: number) => void;
+  initGame: (difficulty: number, mode?: GameMode) => void;
   flipCard: (id: string) => void;
   checkMatch: () => void;
   resetGame: () => void;
@@ -25,10 +26,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   seconds: 0,
   status: 'idle',
   difficulty: 8,
+  mode: 'icons',
   bestScore: getStoredBestScore(),
-  initGame: (difficulty) => {
+  initGame: async (difficulty, mode = 'icons') => {
+    set({ status: 'loading'});
+    const cards = await generateCards(difficulty, mode);
+
     set({
-      cards: generateCards(difficulty),
+      cards,
+      mode,
       moves: 0,
       seconds: 0,
       status: 'idle',
@@ -39,6 +45,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   // Acción para que el hook llame cada segundo
   startGame: () => {
+    sounds.start();
     set({ status: 'playing' });
   },
 
@@ -74,7 +81,15 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (flipped.length !== 2) return;
 
     const [card1, card2] = flipped;
-    const isMatch = card1.iconName === card2.iconName;
+    const isMatch = get().mode === 'icons' 
+      ? card1.iconName === card2.iconName 
+      : card1.imageUrl === card2.imageUrl;
+
+    if (isMatch) {
+      sounds.match();
+    } else {
+      sounds.error();
+    }
 
     set({
       cards: cards.map(card => {
@@ -91,6 +106,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
     if (get().cards.every(card => card.isMatched)) {
       set({ status: 'won' });
+      sounds.win();
       if (seconds < bestScore) {
         set({ bestScore: seconds });
         localStorage.setItem('memory-best-score', seconds.toString());
@@ -100,6 +116,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
 
   resetGame: () => {
     const { difficulty } = get();
+    sounds.reset();
     // Al resetear, volvemos a llamar a initGame que pone status: 'idle'
     get().initGame(difficulty);
   }
