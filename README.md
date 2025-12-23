@@ -1,4 +1,4 @@
-# 🧠 Memory Game - Modern Edition
+# 🧠 Memory Game - Ultra Edition
 
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
@@ -7,92 +7,67 @@
 ![Zustand](https://img.shields.io/badge/Zustand-orange?style=for-the-badge)
 ![Framer Motion](https://img.shields.io/badge/Framer-Motion-black?style=for-the-badge&logo=framer&logoColor=blue)
 
-Un juego de memoria minimalista y de alto rendimiento centrado en una experiencia de usuario fluida. Construido con las últimas tecnologías de desarrollo web para demostrar el manejo de estado global, animaciones 3D y persistencia de datos.
+Una experiencia de juego de memoria premium, diseñada con un enfoque en la interactividad, el diseño visual moderno y el rendimiento técnico.
 
 ---
 
-## 🎮 Demo
-> **Proximamente...**
+## 🌟 Características Principales
 
----
+### 🎮 Modos de Juego
+* **🌐 Modo Online:** Conexión en tiempo real con la API de **Unsplash** para generar cartas con fotografías profesionales de alta calidad.
+* **📴 Modo Offline:** Uso de iconos vectoriales dinámicos (**Lucide-React**) para una experiencia rápida y sin consumo de datos.
 
-## ✨ Características
+### 🌗 Experiencia Visual
+* **🌓 Dark Mode Nativo:** Transiciones de color fluidas (Fade) gestionadas con Framer Motion y Zustand.
+* **🃏 Animaciones 3D:** Cartas con física de resorte (`spring`) y efecto de profundidad real.
+* **✨ Efectos Especiales:** Sistema de partículas (Confeti) al alcanzar la victoria.
 
-* **🃏 Cartas con Efecto 3D:** Animaciones realistas de volteado usando `Framer Motion` y propiedades de perspectiva CSS.
-* **🧩 Dificultad Adaptativa:** Elige entre niveles Fácil (8), Medio (16) o Difícil (24) cartas.
-* **⏱️ Sistema de Juego Controlado:** El tiempo no empieza a correr hasta que el jugador hace clic en "Start".
-* **💾 Persistencia de Récord:** Guarda automáticamente tu mejor tiempo (Best Score) en `localStorage`.
-* **🎊 Celebración Final:** Efectos de confeti dinámicos al completar exitosamente todas las parejas.
-* **📱 Diseño Responsive:** Optimizado para una experiencia fluida tanto en dispositivos móviles como en escritorio.
+### 📊 Gestión de Récords
+* **🏆 Leaderboard TOP 10:** Ranking dinámico que registra día, hora, movimientos y tiempo.
+* **🥇 Sistema de Podio:** Reconocimiento visual con trofeos (Oro, Plata, Bronce) para los mejores tiempos.
+* **💾 Persistencia:** Todos tus récords y preferencias de tema se guardan automáticamente en `localStorage`.
+
+### 🔊 Audio Inmersivo
+* **🎵 Feedback Sonoro:** Efectos de sonido específicos para clics, aciertos (match), errores, reinicio y victoria.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-* **Core:** [React 18](https://reactjs.org/) con [Vite](https://vitejs.dev/)
-* **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
-* **Gestión de Estado:** [Zustand](https://zustand-demo.pmnd.rs/) (Arquitectura atómica y estable)
-* **Animaciones:** [Framer Motion](https://www.framer.com/motion/)
-* **Estilos:** [Tailwind CSS](https://tailwindcss.com/)
-* **Iconos:** [Lucide React](https://lucide.dev/)
-* **Efectos:** [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
+* **Frontend:** React 18 + Vite.
+* **Estado Global:** Zustand (Gestión atómica de la lógica del juego).
+* **Estilos:** Tailwind CSS (Arquitectura utilitaria y responsive).
+* **Animaciones:** Framer Motion (Transiciones de estado y 3D transforms).
+* **API:** Unsplash API (Para imágenes dinámicas).
 
 ---
 
-## 📂 Organización de Carpetas
-
-El proyecto sigue una estructura basada en **Features** para facilitar la escalabilidad:
+## 📂 Estructura del Proyecto
 
 ```text
 src/
-├── features/game/
-│   ├── components/    # Board, Card, ScoreBoard
-│   ├── types/         # Interfaces de TypeScript
-│   └── utils/         # Lógica de barajado (Shuffle) y generación
-├── store/             # Cerebro del juego (Zustand)
-├── hooks/             # useTimer, useWindowSize
-└── App.tsx            # Punto de entrada y lógica de victoria
+├── assets/sounds/     # Biblioteca de efectos de audio
+├── features/game/     # Componentes (Board, Card, ScoreBoard, Leaderboard)
+├── store/             # Zustand Store (Cerebro del juego)
+├── hooks/             # Custom hooks (useTimer, etc.)
+├── utils/             # Generador de cartas, barajado y utilidades de audio
+└── types/             # Definiciones de TypeScript para el dominio del juego
 
 ```
 
 ---
 
-## 🚀 Instalación Local
+## 🚀 Instalación
 
-1. **Clona el repositorio**
-```bash
-git clone [https://github.com/DavidCortesA/memory-game.git](https://github.com/DavidCortesA/memory-game.git)
-cd memory-game
-
-```
-
-
-2. **Instala las dependencias**
-```bash
-npm install
-
-```
-
-
-3. **Inicia el modo desarrollo**
-```bash
-npm run dev
-
-```
-
-
+1. **Clonar:** `git clone https://github.com/DavidCortesA/memory-game.git`
+2. **Dependencias:** `npm install`
+3. **Variables de Entorno:** Crea un `.env` con tu `VITE_UNSPLASH_ACCESS_KEY`.
+4. **Ejecutar:** `npm run dev`
 
 ---
 
-## 📈 Próximas Mejoras (Roadmap)
+## 📝 Nota Final
 
-* [ ] 🔊 Implementar efectos de sonido (click, match, victory).
-* [ ] 🎨 Selector de temas (Dark mode / Colores personalizados).
-* [ ] 👥 Modo multijugador local por turnos.
-* [ ] 🖼️ Opción para usar imágenes reales mediante una API (ej. Unsplash).
+Este proyecto ha sido desarrollado como una pieza de portafolio que demuestra el manejo avanzado de estado, integración de APIs externas, persistencia de datos y pulido de UI/UX.
 
----
-
-## 👤 Autor
-
-Desarrollado por **David Cortez** - ¡Siéntete libre de contactarme para feedback o sugerencias!
+**¡Gracias por jugar y feedback bienvenido!** 🚀

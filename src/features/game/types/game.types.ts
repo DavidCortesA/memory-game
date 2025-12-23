@@ -18,4 +18,13 @@ export interface GameState {
   bestScore: number;
   mode: GameMode;
   isDarkMode: boolean;
+  scores: ScoreEntry[];
+}
+
+export interface ScoreEntry {
+  id: string;
+  date: string;     // Para el día y hora
+  moves: number;
+  seconds: number;
+  mode: GameMode;
 }

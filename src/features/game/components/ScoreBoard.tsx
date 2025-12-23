@@ -1,10 +1,21 @@
 import { useGameStore } from '../../../store/useGameStore';
 import { useTimer } from '../../../hooks/useTimer';
-import { RotateCcw, Timer, Hash, PlayIcon } from 'lucide-react';
+import { RotateCcw, Timer, Hash, PlayIcon, Trophy } from 'lucide-react';
+import { LeaderboardModal } from './LeaderboardModal';
+import { useState } from 'react';
 
 export const ScoreBoard = () => {
   const { moves, resetGame, difficulty, initGame, bestScore, startGame, status, mode, isDarkMode } = useGameStore();
   const { formatTime } = useTimer();
+  const [openLeaderboard, setOpenLeaderboard] = useState(false);
+
+  const handleOpenLeaderboard = () => {
+    setOpenLeaderboard(true);
+  };
+
+  const handleCloseLeaderboard = () => {
+    setOpenLeaderboard(false);
+  }
 
   return (
     <div className="flex flex-col items-center gap-6 mb-8 w-full">
@@ -33,11 +44,16 @@ export const ScoreBoard = () => {
           <span className={`font-bold text-gray-700 font-mono ${isDarkMode ? 'text-white' : 'text-indigo-600'}`}>{formatTime()}</span>
         </div>
       </div>
-
-      <span className="text-xs uppercase text-gray-400 font-bold">Récord:</span>
-      <span className="font-bold text-indigo-600">
-        {bestScore === Infinity ? '--:--' : `${Math.floor(bestScore / 60)}:${(bestScore % 60).toString().padStart(2, '0')}`}
-      </span>
+      <div>
+        <span className="text-md uppercase text-gray-400 font-bold">Récord: </span>
+        <span className="font-bold text-indigo-600">
+          {bestScore === Infinity ? '--:--' : `${Math.floor(bestScore / 60)}:${(bestScore % 60).toString().padStart(2, '0')}`}
+        </span>
+      </div>
+      <button className={`${isDarkMode ? 'bg-indigo-500' : 'bg-indigo-600'} text-white px-8 py-2 rounded-lg font-bold flex items-center gap-2 flex-row transition-all duration-300 hover:scale-105`} onClick={handleOpenLeaderboard}>
+        <Trophy size={20} />
+        Ver Records
+      </button>
       <div className="flex gap-4">
         <select 
           onChange={(e) => initGame(Number(e.target.value))}
@@ -69,6 +85,7 @@ export const ScoreBoard = () => {
           )}
         </div>
       </div>
+      <LeaderboardModal isOpen={openLeaderboard} onClose={handleCloseLeaderboard} />
     </div>
   );
 };

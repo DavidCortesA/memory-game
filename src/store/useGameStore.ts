@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { GameMode, GameState } from "../features/game/types/game.types";
+import type { GameMode, GameState, ScoreEntry } from "../features/game/types/game.types";
 import { generateCards } from "../features/game/utils/generateCards";
 import { sounds } from "../features/game/utils/audio";
 
@@ -21,6 +21,11 @@ const getStoredBestScore = () => {
   return saved ? Number(saved) : Infinity; // Usamos Infinity para que cualquier tiempo sea mejor al principio
 };
 
+const getStoredScores = (): ScoreEntry[] => {
+  const saved = localStorage.getItem('memory-scores');
+  return saved ? JSON.parse(saved) : [];
+};
+
 export const useGameStore = create<GameState & GameActions>((set, get) => ({
   cards: [],
   moves: 0,
@@ -28,6 +33,7 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
   status: 'idle',
   difficulty: 8,
   mode: 'icons',
+  scores: getStoredScores(),
   isDarkMode: localStorage.getItem('theme') === 'dark',
   bestScore: getStoredBestScore(),
   initGame: async (difficulty, mode = 'icons') => {
@@ -115,6 +121,22 @@ export const useGameStore = create<GameState & GameActions>((set, get) => ({
     if (get().cards.every(card => card.isMatched)) {
       set({ status: 'won' });
       sounds.win();
+
+      const newScore: ScoreEntry = {
+        id: crypto.randomUUID(),
+        date: new Date().toLocaleString(),
+        moves: get().moves,
+        seconds: get().seconds,
+        mode: get().mode
+      };
+
+      const updatedScores = [...get().scores, newScore]
+        .sort((a, b) => a.moves - b.moves)
+        .slice(0, 10);
+
+      set({ scores: updatedScores });
+      localStorage.setItem('memory-scores', JSON.stringify(updatedScores));
+
       if (seconds < bestScore) {
         set({ bestScore: seconds });
         localStorage.setItem('memory-best-score', seconds.toString());
